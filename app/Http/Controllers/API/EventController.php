@@ -160,8 +160,6 @@ $events = $query->paginate(10);
     }
 
     $event = Event::findOrFail($id);
-
-    // 👇 check ownership
     if ($event->created_by != $user->id) {
         return ApiResponse::error('You can only update your own events', 403);
     }
