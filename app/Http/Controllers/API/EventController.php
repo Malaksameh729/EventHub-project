@@ -181,7 +181,6 @@ $events = $query->paginate(10);
         'address'
     ]);
 
-    // image update
     if ($request->hasFile('image')) {
         $data['image'] = $request->file('image')->store('events', 'public');
     }
@@ -189,9 +188,7 @@ $events = $query->paginate(10);
     if (empty(array_filter($data))) {
         return ApiResponse::error('No data to update', 400);
     }
-
     $changes = [];
-
     foreach ($oldData as $key => $oldValue) {
         if (isset($data[$key]) && $oldValue != $data[$key]) {
             $changes[] = $key;
