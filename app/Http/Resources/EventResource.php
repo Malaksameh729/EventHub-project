@@ -19,7 +19,12 @@ class EventResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'category' => $this->category?->name,
+            'category_id' => $this->category_id,
+                'category' => $this->whenLoaded('category', function () {
+                    return [
+                        'name' => $this->category->name,
+                    ];
+                }),
             'capacity' => $this->capacity,
             'location' => $this->location,
             'type' => $this->type,
@@ -39,5 +44,6 @@ class EventResource extends JsonResource
             ->exists()
         : false,
         ];
+
     }
 }

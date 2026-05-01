@@ -8,7 +8,7 @@ class EventService
 {
     public function filter($request)
     {
-        $query = Event::query();
+        $query = Event::query()->with('category');
 
         if ($request->filled('keyword')) {
             $query->where(function ($q) use ($request) {
@@ -30,7 +30,11 @@ class EventService
         if ($request->filled('price_type')) {
             $query->where('price_type', $request->price_type);
         }
-
+       if ($request->filled('slug')) {
+    $query->whereHas('category', function ($q) use ($request) {
+        $q->where('slug', strtolower($request->slug));
+    });
+}
         if ($request->filled('latitude') && $request->filled('longitude')) {
 
             $lat = $request->latitude;
@@ -55,6 +59,7 @@ class EventService
         } else {
             $query->latest();
         }
+
 
         return $query;
     }

@@ -9,6 +9,7 @@ class Event extends Model
     protected $fillable = [
         'title',
         'description',
+        'category_id',
         'location',
         'start_time',
         'end_time',
@@ -22,7 +23,6 @@ class Event extends Model
         'latitude',
         'longitude',
         'created_by',
-        'category_id',
     ];
 
     public function creator() {
@@ -40,9 +40,10 @@ class Event extends Model
     public function workshops() {
         return $this->hasMany(Workshop::class);
     }
-    public function category() {
-        return $this->belongsTo(Category::class);
-    }
+    public function category()
+{
+    return $this->belongsTo(Category::class, 'category_id');
+}
    public function scopeWithIsFavorite($query, $userId)
 {
     return $query->withCount([
@@ -50,5 +51,13 @@ class Event extends Model
             $q->where('user_id', $userId);
         }
     ]);
+}
+public function speakers()
+{
+    return $this->hasMany(SpeakerApplication::class);
+}
+public function sponsors()
+{
+    return $this->hasMany(Sponsorship::class);
 }
 }

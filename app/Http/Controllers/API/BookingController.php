@@ -69,4 +69,25 @@ class BookingController extends Controller
         'data' => $bookings
     ]);
 }
+public function cancel($id)
+{
+    $booking = Booking::findOrFail($id);
+
+    $user = Auth::user();
+
+    if ($booking->user_id != $user->id) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Not allowed'
+        ], 403);
+    }
+
+    $booking->status = 'cancelled';
+    $booking->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Booking cancelled successfully'
+    ]);
+}
 }

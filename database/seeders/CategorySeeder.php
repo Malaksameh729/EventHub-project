@@ -15,10 +15,14 @@ class CategorySeeder extends Seeder
             ['name' => 'Gaming', 'slug' => 'gaming'],
             ['name' => 'Business', 'slug' => 'business'],
             ['name' => 'Fashion', 'slug' => 'fashion'],
+            ['name' => 'Education', 'slug' => 'education'],
+            ['name' => 'Sport', 'slug' => 'sport'],
         ];
 
         foreach ($categories as $category) {
-            Category::create($category);
-        }
+            Category::firstOrCreate(
+            ['slug' => $category['slug']],
+            ['name' => $category['name']]
+        );        }
     }
 }

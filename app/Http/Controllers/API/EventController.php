@@ -61,6 +61,7 @@ return ApiResponse::success('Home data', [
         Event::withCount('bookings')
             ->withIsFavorite($userId)
             ->orderByDesc('bookings_count')
+            
             ->take(5)
             ->get()
     ),
@@ -138,6 +139,7 @@ $query->with(['category', 'favorites' => function ($q) use ($userId) {
 }]);
 
 $events = $query->paginate(10);
+$events->load('category');
 
     return ApiResponse::success(
         $events->total() > 0 ? 'Events retrieved successfully' : 'No events found',
@@ -160,19 +162,15 @@ $events = $query->paginate(10);
     }
 
     $event = Event::findOrFail($id);
-
-    // 👇 check ownership
     if ($event->created_by != $user->id) {
         return ApiResponse::error('You can only update your own events', 403);
     }
-
     $oldData = $event->only([
         'title',
         'location',
         'start_time',
         'end_time'
     ]);
-
     $data = $request->only([
         'title',
         'description',
@@ -182,8 +180,6 @@ $events = $query->paginate(10);
         'venue_name',
         'address'
     ]);
-
-    // image update
     if ($request->hasFile('image')) {
         $data['image'] = $request->file('image')->store('events', 'public');
     }
@@ -222,5 +218,67 @@ $events = $query->paginate(10);
         'Event updated successfully',
         $event
     );
+}
+public function show($id)
+{
+
+    $event = Event::with([
+        'category',
+        'speakers.user',
+        'sponsors.user',
+        'sponsors.package'
+    ])->findOrFail($id);
+
+    return response()->json([
+        'success' => true,
+        'data' => [
+            'event' => new EventResource($event),
+
+            'speakers' => $event->speakers->map(function ($s) {
+                return [
+                    'id' => $s->id,
+                    'name' => $s->user->name,
+                    'profile_picture' => $s->user->profile_picture,
+                    'session_title' => $s->session_title,
+                    'summary' => $s->summary,
+                ];
+            }),
+
+            'sponsors' => $event->sponsors->map(function ($s) {
+                return [
+                    'id' => $s->id,
+                    'name' => $s->user->name,
+                    'logo' => $s->user->logo,
+                ];
+            }),
+        ]
+    ]);
+}
+public function destroy($id)
+{
+    $user = Auth::user();
+
+    if (!$user || !$user->hasRole('organizer')) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Only organizers can delete events'
+        ], 403);
+    }
+
+    $event = Event::findOrFail($id);
+
+    if ($event->created_by != $user->id) {
+        return response()->json([
+            'success' => false,
+            'message' => 'You are not allowed to delete this event'
+        ], 403);
+    }
+
+    $event->delete();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Event deleted successfully'
+    ]);
 }
 }

@@ -19,8 +19,7 @@ return new class extends Migration
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+http://127.0.0.1:8000/api/v1/events?slug=tech            $table->timestamps();
 
         });
     }

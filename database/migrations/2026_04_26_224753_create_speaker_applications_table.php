@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('speaker_applications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('event_id')->constrained()->cascadeOnDelete();
             $table->string('session_title');
             $table->text('summary')->nullable();
             $table->string('duration')->nullable();

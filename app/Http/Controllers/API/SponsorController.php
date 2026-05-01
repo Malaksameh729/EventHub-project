@@ -22,13 +22,24 @@ class SponsorController extends Controller
     }
 
     $request->validate([
-        'package_id' => 'required|exists:packages,id'
+        'package_id' => 'required|exists:packages,id',
+        'event_id' => 'required|exists:events,id'
     ]);
+    $exists = Sponsorship::where('user_id', $user->id)
+    ->where('event_id', $request->event_id)
+    ->exists();
 
+if ($exists) {
+    return response()->json([
+        'success' => false,
+        'message' => 'You already sponsored this event'
+    ], 400);
+}
     $package = Package::findOrFail($request->package_id);
 
     $sponsorship = Sponsorship::create([
         'user_id' => $user->id,
+        'event_id' => $request->event_id,
         'package_id' => $package->id,
         'price' => $package->price,
     ]);
@@ -37,17 +48,20 @@ class SponsorController extends Controller
         'success' => true,
         'message' => 'Package selected',
         'data' => [
-            'package' => $package->name,
-            'price' => $package->price,
-            'features' => [
-                'logo_size' => $package->logo_size,
-                'booth' => $package->booth,
-                'speaking_slot' => $package->speaking_slot,
-                'tickets' => $package->tickets,
-            ]
+        'sponsorship_id' => $sponsorship->id,
+        'event_id' => $sponsorship->event_id,
+        'package' => $package->name,
+        'price' => $package->price,
+        'features' => [
+            'logo_size' => $package->logo_size,
+            'booth' => $package->booth,
+            'speaking_slot' => $package->speaking_slot,
+            'tickets' => $package->tickets,
         ]
+    ]
     ]);
-}
+    }
+
 public function packages()
 {
     return response()->json([

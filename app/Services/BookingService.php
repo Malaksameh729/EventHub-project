@@ -96,9 +96,10 @@ class BookingService
    public function myTickets($user)
 {
     return Booking::with('event')
-        ->where('user_id', $user->id)
-        ->latest()
-        ->get()
+    ->where('user_id', $user->id)
+    ->where('status', '!=', 'cancelled')
+    ->latest()
+    ->get()
         ->map(function ($booking) use ($user) {
 
             return [

@@ -21,14 +21,25 @@ class SpeakerController extends Controller
     }
 
     $request->validate([
+        'event_id' => 'required|exists:events,id',
         'session_title' => 'required|string|max:255',
         'summary' => 'nullable|string',
         'duration' => 'nullable|string',
         'session_format' => 'nullable|string',
     ]);
+      $exists = SpeakerApplication::where('user_id', $user->id)
+        ->where('event_id', $request->event_id)
+        ->exists();
 
+    if ($exists) {
+        return response()->json([
+            'success' => false,
+            'message' => 'You already applied to this event'
+        ], 400);
+    }
     $application = SpeakerApplication::create([
         'user_id' => $user->id,
+        'event_id' => $request->event_id,
         'session_title' => $request->session_title,
         'summary' => $request->summary,
         'duration' => $request->duration,
