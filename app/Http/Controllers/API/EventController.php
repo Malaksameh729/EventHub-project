@@ -180,6 +180,7 @@ $events->load('category');
         'venue_name',
         'address'
     ]);
+
     if ($request->hasFile('image')) {
         $data['image'] = $request->file('image')->store('events', 'public');
     }
@@ -187,9 +188,7 @@ $events->load('category');
     if (empty(array_filter($data))) {
         return ApiResponse::error('No data to update', 400);
     }
-
     $changes = [];
-
     foreach ($oldData as $key => $oldValue) {
         if (isset($data[$key]) && $oldValue != $data[$key]) {
             $changes[] = $key;

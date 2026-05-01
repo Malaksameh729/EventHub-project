@@ -24,7 +24,7 @@ class AdminController extends Controller
 
     $user = User::findOrFail($id);
 
-    $user->status = (int) $request->status; // 1 = approved, 2 = rejected
+    $user->status = (int) $request->status; 
     $user->save();
 
     return ApiResponse::success($user, 'User status updated successfully');

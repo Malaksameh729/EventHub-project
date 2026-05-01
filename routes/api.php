@@ -22,11 +22,10 @@ Route::prefix('v1')->group(function () {
         Route::post('verify-otp', [PasswordController::class, 'verifyOtp']);
         Route::post('reset-password', [PasswordController::class, 'resetPassword']);
         Route::middleware('auth:api')->group(function () {
-            Route::post('logout', [AuthController::class, 'logout']);
-            Route::post('refresh', [AuthController::class, 'refresh']);
-            Route::get('me', [AuthController::class, 'me']);
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::post('refresh', [AuthController::class, 'refresh']);
+        Route::get('me', [AuthController::class, 'me']);
         });
-
     });
     Route::middleware(['auth:api','role:admin'])->group(function () {
         Route::get('admin/pending-users', [AdminController::class, 'pendingUsers']);
