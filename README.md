@@ -497,4 +497,4 @@ EventHub provides a complete backend foundation for an event discovery and booki
 
 in one centralized system.
 
-Built with  using **Laravel & MySQL**.
+Built using **Laravel & MySQL**.
