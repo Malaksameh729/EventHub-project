@@ -179,61 +179,100 @@ Make sure you have the following installed:
 - XAMPP, Laragon, or another Laravel-compatible local server
 
 ---
-##📡 API Endpoints
-Authentication
+## 📡 API Endpoints
+
+### Authentication
+
+Protected endpoints require an authenticated user's access token.
+
+```http
 Authorization: Bearer YOUR_ACCESS_TOKEN
 Accept: application/json
 Content-Type: application/json
+```
+
+### Authentication Endpoints
+
+```http
 POST /api/v1/register
 POST /api/v1/login
 POST /api/v1/logout
+```
 
-Events
+### Events
+
+```http
 GET    /api/v1/events
 GET    /api/v1/events/{id}
 POST   /api/v1/events
 PUT    /api/v1/events/{id}
 DELETE /api/v1/events/{id}
+```
 
-Event Filtering
+### Event Filtering
+
+```http
 GET /api/v1/events?keyword=AI
 GET /api/v1/events?city=Cairo
 GET /api/v1/events?type=online
 GET /api/v1/events?price_type=free
 GET /api/v1/events?slug=tech
+```
 
-Event Sorting
+### Event Sorting
+
+```http
 GET /api/v1/events?sort=nearest
 GET /api/v1/events?sort=lowest_price
 GET /api/v1/events?sort=nearest_price
+```
 
-Location Filtering
+### Location Filtering
+
+```http
 GET /api/v1/events?latitude=30.0444&longitude=31.2357&radius=50
+```
 
-Bookings
+### Bookings
+
+```http
 POST /api/v1/bookings
 GET /api/v1/my-tickets
+```
 
-Notifications
+### Notifications
+
+```http
 GET /api/v1/notifications
+```
 
-Location Data
+---
+
+## 📍 Location Data
 
 Each physical event can store geographical coordinates:
 
-Latitude
-Longitude
+- Latitude
+- Longitude
 
 Example:
 
+```text
 latitude: 30.0444
+longitude: 31.2357
+```
+
 These coordinates are used for:
 
-Distance calculation
-Nearby event discovery
-Location-based filtering
+- Distance calculation
+- Nearby event discovery
+- Location-based filtering
 
-##🗃️ Main Relationships
+---
+
+## 🗃️ Main Relationships
+
+```text
 User
  ├── Bookings
  │      └── Event
@@ -250,9 +289,14 @@ User
 
 Event
  └── Category
- 
- ##🔄 Booking Flow
- User
+```
+
+---
+
+## 🔄 Booking Flow
+
+```text
+User
   ↓
 Select Event
   ↓
@@ -267,39 +311,47 @@ Generate Booking Code
 Generate QR Code
   ↓
 Create Notification
+```
 
-##🧩 Services
-EventService
+---
 
-Responsible for:
+## 🧩 Services
 
-Event filtering
-Keyword search
-Category filtering
-Location-based distance calculation
-Event sorting
-BookingService
+### EventService
 
 Responsible for:
 
-Creating bookings
-Updating bookings
-Capacity validation
-Booking codes
-QR code generation
-Ticket retrieval
-NotificationService
+- Event filtering
+- Keyword search
+- Category filtering
+- Location-based distance calculation
+- Event sorting
+
+### BookingService
 
 Responsible for:
 
-Creating notifications
-Connecting notifications to events
-Storing notification images
-Storing notification types
+- Creating bookings
+- Updating bookings
+- Capacity validation
+- Booking codes
+- QR code generation
+- Ticket retrieval
 
-##📁 Project Structure
+### NotificationService
 
+Responsible for:
 
+- Creating notifications
+- Connecting notifications to events
+- Storing notification images
+- Storing notification types
+
+---
+
+## 📁 Project Structure
+
+```text
 eventhub/
 │
 ├── app/
@@ -335,3 +387,114 @@ eventhub/
 ├── composer.json
 ├── artisan
 └── README.md
+```
+
+---
+
+## 🧪 API Testing
+
+The API can be tested using:
+
+- Postman
+- Insomnia
+- Thunder Client
+
+For protected endpoints, include:
+
+```http
+Authorization: Bearer YOUR_ACCESS_TOKEN
+```
+
+Example:
+
+```http
+GET http://127.0.0.1:8000/api/v1/events
+```
+
+Location example:
+
+```http
+GET http://127.0.0.1:8000/api/v1/events?latitude=30.0444&longitude=31.2357&radius=50
+```
+
+---
+
+## 🔒 Security
+
+EventHub uses authentication and authorization to protect user-specific operations.
+
+Examples include:
+
+- Protected booking endpoints
+- Role-restricted speaker applications
+- Role-restricted sponsorship actions
+- Event management permissions
+- User-specific notifications
+- User-specific bookings
+
+Users are only allowed to manage resources they are authorized to access.
+
+---
+
+## 🚧 Future Improvements
+
+- 💳 Online payment integration
+- 📲 Push notifications
+- ⭐ Event reviews and ratings
+- 📅 Calendar integration
+- 📊 Advanced analytics dashboard
+- 📍 Advanced location recommendations
+- 🎤 Speaker management dashboard
+- 🤝 Sponsor management dashboard
+- 🎟️ Event attendance / check-in system
+- ⚡ Real-time notifications
+- 🤖 Personalized event recommendations
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome.
+
+### 1. Fork the repository
+
+### 2. Create a feature branch
+
+```bash
+git checkout -b feature/your-feature
+```
+
+### 3. Make your changes
+
+### 4. Commit your changes
+
+```bash
+git add .
+git commit -m "Add your feature"
+```
+
+### 5. Push your branch
+
+```bash
+git push origin feature/your-feature
+```
+
+### 6. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is developed for educational and practical purposes.
+
+---
+
+## ⭐ EventHub
+
+EventHub provides a complete backend foundation for an event discovery and booking platform, bringing together:
+
+**Attendees • Organizers • Speakers • Sponsors**
+
+in one centralized system.
+
+Built with  using **Laravel & MySQL**.
