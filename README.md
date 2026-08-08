@@ -179,7 +179,7 @@ Make sure you have the following installed:
 - XAMPP, Laragon, or another Laravel-compatible local server
 
 ---
-📡 API Endpoints
+##📡 API Endpoints
 Authentication
 Authorization: Bearer YOUR_ACCESS_TOKEN
 Accept: application/json
@@ -233,7 +233,7 @@ Distance calculation
 Nearby event discovery
 Location-based filtering
 
-🗃️ Main Relationships
+##🗃️ Main Relationships
 User
  ├── Bookings
  │      └── Event
@@ -251,7 +251,7 @@ User
 Event
  └── Category
  
- 🔄 Booking Flow
+ ##🔄 Booking Flow
  User
   ↓
 Select Event
@@ -268,7 +268,7 @@ Generate QR Code
   ↓
 Create Notification
 
-🧩 Services
+##🧩 Services
 EventService
 
 Responsible for:
@@ -297,7 +297,9 @@ Connecting notifications to events
 Storing notification images
 Storing notification types
 
-📁 Project Structure
+##📁 Project Structure
+
+
 eventhub/
 │
 ├── app/
